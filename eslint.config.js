@@ -10,6 +10,9 @@ export default defineConfig([
   globalIgnores(['dist']),
   {
     files: ['**/*.{ts,tsx}'],
+    rules: {
+      'no-console': ['error', { allow: ['warn', 'error'] }],
+    },
     extends: [
       js.configs.recommended,
       tseslint.configs.recommended,
