@@ -10,9 +10,6 @@ export default defineConfig([
   globalIgnores(['dist']),
   {
     files: ['**/*.{ts,tsx}'],
-    rules: {
-      'no-console': ['error', { allow: ['warn', 'error'] }],
-    },
     extends: [
       js.configs.recommended,
       tseslint.configs.recommended,
@@ -20,8 +17,12 @@ export default defineConfig([
       reactRefresh.configs.vite,
     ],
     languageOptions: {
-      ecmaVersion: 2020,
+      ecmaVersion: 2023,
       globals: globals.browser,
+    },
+    rules: {
+      'no-console': ['error', { allow: ['warn', 'error'] }],
+      'no-debugger': 'error',
     },
   },
   eslintConfigPrettier,
