@@ -23,6 +23,114 @@ export default defineConfig([
     rules: {
       "no-console": ["error", { allow: ["warn", "error"] }],
       "no-debugger": "error",
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["../*"],
+              message:
+                "Для межслойных импортов используйте alias: @app, @pages, @widgets, @entities, @features, @shared или @.",
+            },
+            {
+              group: ["../../*"],
+              message:
+                "Для межслойных импортов используйте alias: @app, @pages, @widgets, @entities, @features, @shared или @.",
+            },
+            {
+              group: ["../../../*"],
+              message:
+                "Для межслойных импортов используйте alias: @app, @pages, @widgets, @entities, @features, @shared или @.",
+            },
+            {
+              group: ["../../../../*"],
+              message:
+                "Для межслойных импортов используйте alias: @app, @pages, @widgets, @entities, @features, @shared или @.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/shared/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@app/*", "@pages/*", "@widgets/*", "@entities/*", "@features/*"],
+              message:
+                "Слой shared не должен зависеть от app, pages, widgets, entities и features.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/entities/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@app/*", "@pages/*", "@widgets/*", "@features/*"],
+              message: "Слой entities не должен зависеть от app, pages, widgets и features.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/features/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@app/*", "@pages/*", "@widgets/*"],
+              message: "Слой features не должен зависеть от app, pages и widgets.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/widgets/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@app/*", "@pages/*"],
+              message: "Слой widgets не должен зависеть от app и pages.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/pages/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@app/*"],
+              message: "Слой pages не должен зависеть от app.",
+            },
+          ],
+        },
+      ],
     },
   },
   eslintConfigPrettier,
