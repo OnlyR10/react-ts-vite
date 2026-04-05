@@ -1,7 +1,26 @@
+## Стек
+
+| Категория      | Технология             |
+| -------------- | ---------------------- |
+| UI             | React 19               |
+| Язык           | TypeScript 5           |
+| Сборщик        | Vite 8                 |
+| Стили          | Tailwind CSS 4         |
+| Линтер         | ESLint 9 (flat config) |
+| Форматирование | Prettier 3             |
+| Git-хуки       | Husky + lint-staged    |
+| SVG            | vite-plugin-svgr       |
+
+В зависимостях зарезервированы `zustand` и `@tanstack/react-query` — подключаются при первом реальном use-case.
+
+---
+
 ## Требования
 
-- `Node.js` 20+
-- `npm` 10+
+- Node.js 20+
+- npm 10+
+
+---
 
 ## Быстрый старт
 
@@ -10,120 +29,91 @@ npm install
 npm run dev
 ```
 
-Приложение запускается на `http://localhost:3000`.
+Dev-сервер: `http://localhost:3000`
 
-## Минимальная структура слоев
+---
 
-На старте проекта фиксируем 6 слоев:
+## Структура проекта (FSD)
 
-- `src/app` - композиция приложения (entrypoint, роутинг, связка экранов/фич);
-- `src/pages` - сборка экранов из widgets/features/entities;
-- `src/widgets` - крупные UI-блоки, собирающие несколько features/entities;
-- `src/entities` - бизнес-сущности, их модели и базовые представления;
-- `src/features` - пользовательские сценарии и feature-модули;
-- `src/shared` - переиспользуемые UI-элементы, утилиты и типы без бизнес-логики.
+Слои расположены сверху вниз — каждый слой импортирует только из тех, что ниже.
 
-## Правила импортов через alias
+```
+src/
+├── app/        # entrypoint, компоновка приложения
+├── pages/      # сборка страниц из виджетов и фич
+├── widgets/    # крупные UI-блоки
+├── features/   # пользовательские сценарии
+├── entities/   # бизнес-сущности
+└── shared/     # UI-примитивы, утилиты, типы
+```
 
-Используем alias для межслойных импортов:
+Текущий демонстрационный поток:
 
-- `@app/*` -> `src/app/*`
-- `@pages/*` -> `src/pages/*`
-- `@widgets/*` -> `src/widgets/*`
-- `@entities/*` -> `src/entities/*`
-- `@features/*` -> `src/features/*`
-- `@shared/*` -> `src/shared/*`
-- `@/*` -> `src/*` (общий alias)
+```
+app
+└── pages/home
+    ├── widgets/profile-panel
+    │   ├── features/profile-greeting
+    │   │   └── entities/profile
+    │   └── entities/profile
+    │       └── shared/ui/icons
+    ├── features/profile-greeting
+    └── entities/profile
+```
 
-Ограничения:
+---
 
-- межслойные импорты через `../` запрещены (ESLint `no-restricted-imports`);
-- `shared` не импортирует `app`, `pages`, `widgets`, `entities`, `features`;
-- `entities` не импортирует `app`, `pages`, `widgets`, `features`;
-- `features` не импортирует `app`, `pages`, `widgets`;
-- `widgets` не импортирует `app`, `pages`;
-- `pages` не импортирует `app`.
+## Alias-импорты
 
-## Команды проекта
+Для межслойных импортов используются только alias:
 
-- `npm run dev` - запуск dev-сервера
-- `npm run build` - production-сборка (`tsc -b && vite build`)
-- `npm run preview` - локальный просмотр production-сборки
-- `npm run lint` - проверка `eslint`
-- `npm run typecheck` - проверка типов TypeScript
-- `npm run format` - автоформатирование `prettier --write .`
-- `npm run format:check` - проверка форматирования без изменений
+```
+@app/*       →  src/app/*
+@pages/*     →  src/pages/*
+@widgets/*   →  src/widgets/*
+@features/*  →  src/features/*
+@entities/*  →  src/entities/*
+@shared/*    →  src/shared/*
+@/*          →  src/*
+```
 
-## Правила pre-commit
+### Правила границ
 
-Перед каждым коммитом автоматически выполняется `.husky/pre-commit`:
+Настроены в `eslint.config.js` через `no-restricted-imports`:
 
-1. `npx lint-staged`
-2. `npm run typecheck`
+- `../` в чужой слой — ошибка;
+- импорт из слоя выше текущего — ошибка;
+- обе формы alias проверяются: `@shared/...` и `@/shared/...`.
 
-Что это означает на практике:
+## Команды
 
-- для `*.{ts,tsx}` запускаются `prettier --write` и `eslint --fix`;
-- для `*.{js,json,css,md}` запускается `prettier --write`;
-- если типизация падает, коммит блокируется до исправления ошибок.
+| Команда                | Описание                              |
+| ---------------------- | ------------------------------------- |
+| `npm run dev`          | Запуск dev-сервера                    |
+| `npm run build`        | Production-сборка                     |
+| `npm run preview`      | Просмотр production-сборки локально   |
+| `npm run lint`         | Проверка ESLint                       |
+| `npm run typecheck`    | Проверка TypeScript                   |
+| `npm run format`       | Форматирование кода                   |
+| `npm run format:check` | Проверка форматирования без изменений |
 
-## Типовой порядок проверки перед PR
+---
 
-Рекомендуемый локальный прогон:
+## Pre-commit
+
+Перед каждым коммитом `.husky/pre-commit` запускает:
+
+1. **lint-staged**
+   - `*.{ts,tsx}` → `prettier --write` + `eslint --fix`
+   - `*.{js,json,css,md}` → `prettier --write`
+2. **typecheck** — если падает, коммит блокируется
+
+---
+
+## Проверка перед PR
 
 ```bash
 npm run lint
 npm run typecheck
 npm run build
 ```
-
-Если нужно, затем привести формат:
-
-```bash
-npm run format
-```
-
-## Как чинить типовые ошибки
-
-### 1. Падает pre-commit на `lint-staged`
-
-Признаки: ошибки `eslint`/`prettier` в измененных файлах.
-
-Порядок действий:
-
-1. Применить автоисправления:
-   ```bash
-   npx lint-staged
-   ```
-2. Если остались ошибки, исправить вручную в указанных файлах.
-3. Повторить коммит.
-
-### 2. Падает pre-commit на `typecheck`
-
-Признаки: ошибки TypeScript после шага `npm run typecheck`.
-
-Порядок действий:
-
-1. Запустить отдельно:
-   ```bash
-   npm run typecheck
-   ```
-2. Исправить ошибки типов (импорты, сигнатуры, null/undefined, несовместимые типы).
-3. Повторно проверить:
-   ```bash
-   npm run typecheck
-   ```
-4. Повторить коммит.
-
-### 3. Сборка не проходит
-
-Признаки: `npm run build` падает, даже если `lint` и `typecheck` прошли.
-
-Порядок действий:
-
-1. Запустить:
-   ```bash
-   npm run build
-   ```
-2. Исправить ошибки сборки (чаще всего: некорректные импорты/пути, runtime-несовместимости).
-3. Повторить полный цикл проверки перед PR.
