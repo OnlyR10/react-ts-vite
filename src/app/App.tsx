@@ -1,12 +1,7 @@
-import { Button } from "./Button";
+import { HomePage } from "@pages";
 
 const App = () => {
-  return (
-    <>
-      <h1 className="text-3xl font-bold">Hello Work</h1>
-      <Button />
-    </>
-  );
+  return <HomePage />;
 };
 
 export default App;

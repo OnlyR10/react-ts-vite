@@ -19,7 +19,19 @@
 
     /* Paths */
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@app": ["./src/app/index.ts"],
+      "@app/*": ["./src/app/*"],
+      "@pages": ["./src/pages/index.ts"],
+      "@pages/*": ["./src/pages/*"],
+      "@widgets": ["./src/widgets/index.ts"],
+      "@widgets/*": ["./src/widgets/*"],
+      "@entities": ["./src/entities/index.ts"],
+      "@entities/*": ["./src/entities/*"],
+      "@features": ["./src/features/index.ts"],
+      "@features/*": ["./src/features/*"],
+      "@shared": ["./src/shared"],
+      "@shared/*": ["./src/shared/*"]
     },
 
     /* Linting */

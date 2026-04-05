@@ -1,73 +1,119 @@
-# React + TypeScript + Vite
+## Стек
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+| Категория      | Технология             |
+| -------------- | ---------------------- |
+| UI             | React 19               |
+| Язык           | TypeScript 5           |
+| Сборщик        | Vite 8                 |
+| Стили          | Tailwind CSS 4         |
+| Линтер         | ESLint 9 (flat config) |
+| Форматирование | Prettier 3             |
+| Git-хуки       | Husky + lint-staged    |
+| SVG            | vite-plugin-svgr       |
 
-Currently, two official plugins are available:
+В зависимостях зарезервированы `zustand` и `@tanstack/react-query` — подключаются при первом реальном use-case.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Требования
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js 20+
+- npm 10+
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Быстрый старт
 
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Dev-сервер: `http://localhost:3000`
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+---
 
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+## Структура проекта (FSD)
+
+Слои расположены сверху вниз — каждый слой импортирует только из тех, что ниже.
+
+```
+src/
+├── app/        # entrypoint, компоновка приложения
+├── pages/      # сборка страниц из виджетов и фич
+├── widgets/    # крупные UI-блоки
+├── features/   # пользовательские сценарии
+├── entities/   # бизнес-сущности
+└── shared/     # UI-примитивы, утилиты, типы
+```
+
+Текущий демонстрационный поток:
+
+```
+app
+└── pages/home
+    ├── widgets/profile-panel
+    │   ├── features/profile-greeting
+    │   │   └── entities/profile
+    │   └── entities/profile
+    │       └── shared/ui/icons
+    ├── features/profile-greeting
+    └── entities/profile
+```
+
+---
+
+## Alias-импорты
+
+Для межслойных импортов используются только alias:
+
+```
+@app/*       →  src/app/*
+@pages/*     →  src/pages/*
+@widgets/*   →  src/widgets/*
+@features/*  →  src/features/*
+@entities/*  →  src/entities/*
+@shared/*    →  src/shared/*
+@/*          →  src/*
+```
+
+### Правила границ
+
+Настроены в `eslint.config.js` через `no-restricted-imports`:
+
+- `../` в чужой слой — ошибка;
+- импорт из слоя выше текущего — ошибка;
+- обе формы alias проверяются: `@shared/...` и `@/shared/...`.
+
+## Команды
+
+| Команда                | Описание                              |
+| ---------------------- | ------------------------------------- |
+| `npm run dev`          | Запуск dev-сервера                    |
+| `npm run build`        | Production-сборка                     |
+| `npm run preview`      | Просмотр production-сборки локально   |
+| `npm run lint`         | Проверка ESLint                       |
+| `npm run typecheck`    | Проверка TypeScript                   |
+| `npm run format`       | Форматирование кода                   |
+| `npm run format:check` | Проверка форматирования без изменений |
+
+---
+
+## Pre-commit
+
+Перед каждым коммитом `.husky/pre-commit` запускает:
+
+1. **lint-staged**
+   - `*.{ts,tsx}` → `prettier --write` + `eslint --fix`
+   - `*.{js,json,css,md}` → `prettier --write`
+2. **typecheck** — если падает, коммит блокируется
+
+---
+
+## Проверка перед PR
+
+```bash
+npm run lint
+npm run typecheck
+npm run build
 ```
