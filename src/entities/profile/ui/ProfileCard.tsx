@@ -1,4 +1,3 @@
-import { ProfileGreeting } from "@/features";
 import { FirstIcon } from "@shared/ui/icons";
 
 type ProfileCardProps = {
@@ -14,7 +13,6 @@ export const ProfileCard = ({ name, role }: ProfileCardProps) => {
         <h2 className="text-lg font-semibold">{name}</h2>
       </div>
       <p className="text-sm text-zinc-600">{role}</p>
-      <ProfileGreeting />
     </article>
   );
 };

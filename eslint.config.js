@@ -6,6 +6,42 @@ import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
+// FSD-порядок слоёв сверху вниз.
+// Каждый слой может импортировать только из слоёв ниже себя.
+const FSD_LAYERS = ["app", "pages", "widgets", "features", "entities", "shared"];
+
+const noRelativeParentImport = {
+  regex: "^(\\.\\./)+(app|pages|widgets|features|entities|shared)(/|$)",
+  message:
+    "Межслойные импорты через ../ запрещены. Используйте alias: @app, @pages, @widgets, @entities, @features, @shared или @.",
+};
+
+const layerBoundaryConfigs = FSD_LAYERS.flatMap((layer, index) => {
+  const forbidden = FSD_LAYERS.slice(0, index);
+  if (forbidden.length === 0) return [];
+
+  const group = forbidden.join("|");
+  const message = `Слой ${layer} не должен зависеть от ${forbidden.join(", ")}.`;
+
+  return [
+    {
+      files: [`src/${layer}/**/*.{ts,tsx}`],
+      rules: {
+        "no-restricted-imports": [
+          "error",
+          {
+            patterns: [
+              noRelativeParentImport,
+              { regex: `^@(${group})(/|$)`, message },
+              { regex: `^@/(${group})(/|$)`, message },
+            ],
+          },
+        ],
+      },
+    },
+  ];
+});
+
 export default defineConfig([
   globalIgnores(["dist"]),
   {
@@ -23,100 +59,9 @@ export default defineConfig([
     rules: {
       "no-console": ["error", { allow: ["warn", "error"] }],
       "no-debugger": "error",
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: [
-            {
-              regex: "^\\.\\./",
-              message:
-                "Для межслойных импортов используйте alias: @app, @pages, @widgets, @entities, @features, @shared или @.",
-            },
-          ],
-        },
-      ],
+      "no-restricted-imports": ["error", { patterns: [noRelativeParentImport] }],
     },
   },
-  {
-    files: ["src/shared/**/*.{ts,tsx}"],
-    rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: [
-            {
-              regex: "^@(app|pages|widgets|entities|features)(/|$)",
-              message:
-                "Слой shared не должен зависеть от app, pages, widgets, entities и features.",
-            },
-          ],
-        },
-      ],
-    },
-  },
-  {
-    files: ["src/entities/**/*.{ts,tsx}"],
-    rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: [
-            {
-              regex: "^@(app|pages|widgets|features)(/|$)",
-              message: "Слой entities не должен зависеть от app, pages, widgets и features.",
-            },
-          ],
-        },
-      ],
-    },
-  },
-  {
-    files: ["src/features/**/*.{ts,tsx}"],
-    rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: [
-            {
-              regex: "^@(app|pages|widgets)(/|$)",
-              message: "Слой features не должен зависеть от app, pages и widgets.",
-            },
-          ],
-        },
-      ],
-    },
-  },
-  {
-    files: ["src/widgets/**/*.{ts,tsx}"],
-    rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: [
-            {
-              regex: "^@(app|pages)(/|$)",
-              message: "Слой widgets не должен зависеть от app и pages.",
-            },
-          ],
-        },
-      ],
-    },
-  },
-  {
-    files: ["src/pages/**/*.{ts,tsx}"],
-    rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: [
-            {
-              regex: "^@app(/|$)",
-              message: "Слой pages не должен зависеть от app.",
-            },
-          ],
-        },
-      ],
-    },
-  },
+  ...layerBoundaryConfigs,
   eslintConfigPrettier,
 ]);
