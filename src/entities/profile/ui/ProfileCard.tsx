@@ -4,7 +4,7 @@ type ProfileCardProps = {
   name: string;
   role: string;
 };
-
+//test
 export const ProfileCard = ({ name, role }: ProfileCardProps) => {
   return (
     <article className="rounded-xl border border-zinc-200 p-4 shadow-sm">
