@@ -1,2 +1,1 @@
-// Точка расширения для будущих feature-модулей.
-export {};
+export { ProfileGreeting } from "./profile-greeting";

@@ -1,2 +1,1 @@
-// Точка расширения для будущих entity-модулей.
-export {};
+export { ProfileCard } from "./profile";

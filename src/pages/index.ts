@@ -1,2 +1,1 @@
-// Точка расширения для будущих page-модулей.
-export {};
+export { HomePage } from "./home";

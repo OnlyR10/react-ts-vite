@@ -28,22 +28,7 @@ export default defineConfig([
         {
           patterns: [
             {
-              group: ["../*"],
-              message:
-                "Для межслойных импортов используйте alias: @app, @pages, @widgets, @entities, @features, @shared или @.",
-            },
-            {
-              group: ["../../*"],
-              message:
-                "Для межслойных импортов используйте alias: @app, @pages, @widgets, @entities, @features, @shared или @.",
-            },
-            {
-              group: ["../../../*"],
-              message:
-                "Для межслойных импортов используйте alias: @app, @pages, @widgets, @entities, @features, @shared или @.",
-            },
-            {
-              group: ["../../../../*"],
+              regex: "^\\.\\./",
               message:
                 "Для межслойных импортов используйте alias: @app, @pages, @widgets, @entities, @features, @shared или @.",
             },
@@ -60,7 +45,7 @@ export default defineConfig([
         {
           patterns: [
             {
-              group: ["@app/*", "@pages/*", "@widgets/*", "@entities/*", "@features/*"],
+              regex: "^@(app|pages|widgets|entities|features)(/|$)",
               message:
                 "Слой shared не должен зависеть от app, pages, widgets, entities и features.",
             },
@@ -77,7 +62,7 @@ export default defineConfig([
         {
           patterns: [
             {
-              group: ["@app/*", "@pages/*", "@widgets/*", "@features/*"],
+              regex: "^@(app|pages|widgets|features)(/|$)",
               message: "Слой entities не должен зависеть от app, pages, widgets и features.",
             },
           ],
@@ -93,7 +78,7 @@ export default defineConfig([
         {
           patterns: [
             {
-              group: ["@app/*", "@pages/*", "@widgets/*"],
+              regex: "^@(app|pages|widgets)(/|$)",
               message: "Слой features не должен зависеть от app, pages и widgets.",
             },
           ],
@@ -109,7 +94,7 @@ export default defineConfig([
         {
           patterns: [
             {
-              group: ["@app/*", "@pages/*"],
+              regex: "^@(app|pages)(/|$)",
               message: "Слой widgets не должен зависеть от app и pages.",
             },
           ],
@@ -125,7 +110,7 @@ export default defineConfig([
         {
           patterns: [
             {
-              group: ["@app/*"],
+              regex: "^@app(/|$)",
               message: "Слой pages не должен зависеть от app.",
             },
           ],

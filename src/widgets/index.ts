@@ -1,2 +1,1 @@
-// Точка расширения для будущих widget-модулей.
-export {};
+export { ProfilePanel } from "./profile-panel";
