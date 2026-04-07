@@ -1,6 +1,6 @@
-import type { ComponentProps } from "react";
+import { cn } from "@/shared/lib/cn";
 
-import { cn } from "@/lib/utils";
+import type { ComponentProps } from "react";
 
 const Field = ({ className, ...props }: ComponentProps<"div">) => (
   <div

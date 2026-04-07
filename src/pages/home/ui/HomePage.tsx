@@ -1,4 +1,4 @@
-import { TextInput } from "@/uikit";
+import { TextInput } from "@/shared/ui/Input";
 
 export const HomePage = () => {
   return (
