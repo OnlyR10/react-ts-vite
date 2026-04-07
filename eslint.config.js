@@ -6,6 +6,9 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
 import tseslint from "typescript-eslint";
+import pluginQuery from "@tanstack/eslint-plugin-query";
+import unusedImports from "eslint-plugin-unused-imports";
+import importPlugin from "eslint-plugin-import";
 
 // FSD-порядок слоёв сверху вниз.
 // Каждый слой может импортировать только из слоёв ниже себя.
@@ -86,12 +89,27 @@ export default defineConfig([
           order: "asc",
         },
       ],
+      "unused-imports/no-unused-imports": "warn",
+      "no-unused-vars": "off", // отключаем базовое правило ESLint
+      "@typescript-eslint/no-unused-vars": "off", // отключаем также для TypeScript
+      "unused-imports/no-unused-vars": [
+        "warn",
+        {
+          vars: "all",
+          varsIgnorePattern: "^_",
+          args: "after-used",
+          argsIgnorePattern: "^_",
+        },
+      ],
+      "import/no-duplicates": "error",
     },
-
     plugins: {
       perfectionist,
+      "unused-imports": unusedImports,
+      import: importPlugin,
     },
   },
   ...layerBoundaryConfigs,
   eslintConfigPrettier,
+  ...pluginQuery.configs["flat/recommended"],
 ]);
