@@ -1,7 +1,8 @@
-import type { ComponentProps } from "react";
+import { cn } from "@/shared/lib/cn";
 
-import { cn } from "@/lib/utils";
 import { Label } from "../../Label";
+
+import type { ComponentProps } from "react";
 
 const FieldLabel = ({ className, ...props }: ComponentProps<typeof Label>) => (
   <Label

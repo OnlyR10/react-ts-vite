@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import type { BaseInputProps } from "../BaseInput";
+import type { ReactNode } from "react";
 
 export type TextInputProps = BaseInputProps & {
   label?: ReactNode;
