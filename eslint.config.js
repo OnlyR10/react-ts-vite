@@ -1,5 +1,6 @@
 import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
+import perfectionist from "eslint-plugin-perfectionist";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import { defineConfig, globalIgnores } from "eslint/config";
@@ -60,6 +61,35 @@ export default defineConfig([
       "no-console": ["error", { allow: ["warn", "error"] }],
       "no-debugger": "error",
       "no-restricted-imports": ["error", { patterns: [noRelativeParentImport] }],
+      "perfectionist/sort-imports": [
+        "error",
+        {
+          type: "natural",
+          order: "asc",
+          newlinesBetween: 1,
+          groups: ["builtin", "external", "internal", ["parent", "sibling", "index"], "type"],
+          internalPattern: ["^@", "^@/"],
+        },
+      ],
+
+      "perfectionist/sort-named-imports": [
+        "error",
+        {
+          type: "natural",
+          order: "asc",
+        },
+      ],
+      "perfectionist/sort-exports": [
+        "error",
+        {
+          type: "natural",
+          order: "asc",
+        },
+      ],
+    },
+
+    plugins: {
+      perfectionist,
     },
   },
   ...layerBoundaryConfigs,
