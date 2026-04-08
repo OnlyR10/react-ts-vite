@@ -1,27 +1,19 @@
 import { TextInput } from "@/shared/ui/Input";
-import { queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 export const HomePage = () => {
-  const { data, error } = useQuery({
-    notifyOnChangeProps: () => {
-      return ["data"];
-    },
+  const { isPending, isError, data, error } = useQuery({
     queryKey: ["repoData"],
     queryFn: () => fetch("https://api.github.com/repos/TanStack/query").then((res) => res.json()),
   });
-  // console.log("🚀 ~ App ~ data:", data?.name);
 
-  function groupOptions() {
-    return queryOptions({
-      queryKey: ["groups"],
-      queryFn: () => ({ an: 2 }),
-      staleTime: 5 * 1000,
-    });
+  if (isPending) {
+    return <span>Loading...</span>;
   }
 
-  const queryClient = useQueryClient();
-
-  const datas = queryClient.getQueryData(groupOptions().queryKey);
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
 
   return (
     <main className="mx-auto max-w-md p-6">
@@ -30,9 +22,8 @@ export const HomePage = () => {
         type="email"
         placeholder="email@example.com"
         description="Введите email."
+        defaultValue={data?.name || "email"}
       />
-
-      {data}
     </main>
   );
 };
