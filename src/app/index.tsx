@@ -9,7 +9,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <HomePage />
 
-      <ReactQueryDevtools initialIsOpen={true} />
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 };
