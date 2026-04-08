@@ -110,6 +110,6 @@ export default defineConfig([
     },
   },
   ...layerBoundaryConfigs,
-  eslintConfigPrettier,
   ...pluginQuery.configs["flat/recommended"],
+  eslintConfigPrettier,
 ]);
