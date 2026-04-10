@@ -1,7 +1,15 @@
-import { HomePage } from "@/pages/home";
+import { RouterProvider } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+
+import { router } from "./router/router";
 
 const App = () => {
-  return <HomePage />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <TanStackRouterDevtools router={router} />
+    </>
+  );
 };
 
 export default App;
