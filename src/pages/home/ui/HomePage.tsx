@@ -1,6 +1,20 @@
 import { TextInput } from "@/shared/ui/Input";
+import { useQuery } from "@tanstack/react-query";
 
 export const HomePage = () => {
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ["repoData"],
+    queryFn: () => fetch("https://api.github.com/repos/TanStack/query").then((res) => res.json()),
+  });
+
+  if (isPending) {
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
+
   return (
     <main className="mx-auto max-w-md p-6">
       <TextInput
@@ -8,6 +22,7 @@ export const HomePage = () => {
         type="email"
         placeholder="email@example.com"
         description="Введите email."
+        defaultValue={data?.name || "email"}
       />
     </main>
   );
