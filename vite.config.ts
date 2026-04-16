@@ -12,9 +12,7 @@ export default defineConfig({
     tanstackRouter({
       target: "react",
       autoCodeSplitting: true,
-
-      routesDirectory: "./src/pages",
-      routeFileIgnorePattern: ".*(ui|lib|model).*",
+      routesDirectory: "./src/app/router/routes",
       generatedRouteTree: "./src/app/router/routeTree.gen.ts",
       enableRouteTreeFormatting: true, // ! значение по умолчанию. Включает функцию форматирования сгенерированного файла дерева маршрутов, что может занять много времени при работе над крупными проектами
     }),
