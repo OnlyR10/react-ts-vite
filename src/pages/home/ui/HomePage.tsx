@@ -1,5 +1,6 @@
 import { TextInput } from "@/shared/ui/Input";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 
 export const HomePage = () => {
   const { isPending, isError, data, error } = useQuery({
@@ -24,6 +25,10 @@ export const HomePage = () => {
         description="Введите email."
         defaultValue={data?.name || "email"}
       />
+
+      <Link to="/about" className="mt-30">
+        Move to About page
+      </Link>
     </main>
   );
 };

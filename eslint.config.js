@@ -47,7 +47,7 @@ const layerBoundaryConfigs = FSD_LAYERS.flatMap((layer, index) => {
 });
 
 export default defineConfig([
-  globalIgnores(["dist"]),
+  globalIgnores(["dist", "**/routeTree.gen.ts"]),
   {
     files: ["**/*.{ts,tsx}"],
     extends: [
