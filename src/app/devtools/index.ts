@@ -1,2 +1,2 @@
-export { QueryDevtools } from "./react-query-devtools";
-export { RouterDevtools } from "./router-devtools";
+export { QueryDevtools } from "./ReactQueryDevtools";
+export { RouterDevtools } from "./TanStackRouterDevtools";
