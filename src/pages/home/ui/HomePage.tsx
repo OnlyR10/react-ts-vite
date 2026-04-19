@@ -26,9 +26,11 @@ export const HomePage = () => {
         defaultValue={data?.name || "email"}
       />
 
-      <Link to="/about" className="mt-30">
-        Move to About page
-      </Link>
+      <div className="flex flex-col gap-5">
+        <Link to="/table">Move to Table page</Link>
+
+        <Link to="/components">Move to Components page</Link>
+      </div>
     </main>
   );
 };
