@@ -3,6 +3,8 @@ import { type ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tan
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./primitives";
 
+import type { ReactNode } from "react";
+
 type TanStackTableProps<TData> = {
   data: TData[];
   columns: ColumnDef<TData>[];
@@ -44,11 +46,17 @@ const TanStackTable = <TData,>({
       <TableBody>
         {table.getRowModel().rows.map((row) => (
           <TableRow key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <TableCell key={cell.id} className="px-3 py-2">
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </TableCell>
-            ))}
+            {row.getVisibleCells().map((cell) => {
+              const cellRenderer = cell.column.columnDef.cell;
+
+              return (
+                <TableCell key={cell.id} className="px-3 py-2">
+                  {cellRenderer
+                    ? flexRender(cellRenderer, cell.getContext())
+                    : (cell.getValue() as ReactNode)}
+                </TableCell>
+              );
+            })}
           </TableRow>
         ))}
       </TableBody>
