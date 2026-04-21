@@ -1,77 +1,39 @@
+import { useUsersQuery } from "@/entities/users";
+import { getUserRowId, userColumns } from "@/pages/table/model";
 import { TanStackTable } from "@/shared/ui/Table";
-import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 
-import type { ColumnDef } from "@tanstack/react-table";
-
-type UserRow = {
-  id: number;
-  name: string;
-  email: string;
-  username: string;
-};
-
-const columns: ColumnDef<UserRow>[] = [
-  {
-    accessorKey: "id",
-    header: "ID",
-  },
-  {
-    accessorKey: "name",
-    header: "Name",
-  },
-  {
-    accessorKey: "username",
-    header: "Username",
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-  },
-];
-
-const getUsers = async (): Promise<UserRow[]> => {
-  const response = await fetch("https://jsonplaceholder.typicode.com/users/");
-
-  if (!response.ok) {
-    throw new Error("Failed to load users");
-  }
-
-  return response.json();
-};
-
 export const Table = () => {
-  const {
-    data = [],
-    isPending,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["users"],
-    queryFn: getUsers,
-  });
-
-  if (isPending) {
-    return (
-      <div className="mx-auto flex max-w-2xl flex-col gap-4 p-6">
-        <span>Loading users...</span>
-        <Link to="/">Back to Home page</Link>
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="mx-auto flex max-w-2xl flex-col gap-4 p-6">
-        <span>Error: {error.message}</span>
-        <Link to="/">Back to Home page</Link>
-      </div>
-    );
-  }
+  const { data = [], isPending, isError } = useUsersQuery();
 
   return (
-    <div className="mx-auto flex max-w-2xl flex-col gap-4 p-6">
-      <TanStackTable data={data} columns={columns} />
+    <div className="flex max-w-4xl flex-col gap-6 p-6">
+      <div className="flex flex-row gap-6">
+        <div className="flex flex-col gap-2">
+          <div className="text-sm font-medium">Выбор единичный строки</div>
+          <TanStackTable
+            data={data}
+            columns={userColumns}
+            rowSelectionMode="single"
+            getRowId={getUserRowId}
+            isPending={isPending}
+            isError={isError}
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <div className="text-sm font-medium">Мультивыбор с чекбоксами</div>
+          <TanStackTable
+            data={data}
+            columns={userColumns}
+            rowSelectionMode="multiple"
+            getRowId={getUserRowId}
+            isPending={isPending}
+            isError={isError}
+            emptyState="Нет данных"
+          />
+        </div>
+      </div>
       <Link to="/">Back to Home page</Link>
     </div>
   );

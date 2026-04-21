@@ -11,4 +11,4 @@ export {
 export type { TableProps } from "./primitives";
 
 export { TanStackTable } from "./TanStackTable";
-export type { TanStackTableProps } from "./TanStackTable";
+export type { TanStackGetRowId, TanStackTableProps } from "./types";
