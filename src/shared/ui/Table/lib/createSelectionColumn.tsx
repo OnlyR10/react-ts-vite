@@ -1,4 +1,4 @@
-import { Checkbox } from "@/shared/ui/checkbox";
+import { Checkbox } from "@/shared/ui/Checkbox/Checkbox";
 
 import type { ColumnDef } from "@tanstack/react-table";
 
