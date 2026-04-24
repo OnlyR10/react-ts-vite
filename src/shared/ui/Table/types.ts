@@ -1,4 +1,4 @@
-import type { ColumnDef, TableOptions } from "@tanstack/react-table";
+import type { ColumnDef, Row, Table, TableOptions } from "@tanstack/react-table";
 import type { ReactNode } from "react";
 
 export type SharedTableOptions<TData extends object> = Omit<
@@ -36,3 +36,12 @@ export type TanStackTableProps<TData extends object = object> = {
 export type TanStackGetRowId<TData extends object> = NonNullable<
   TanStackTableProps<TData>["getRowId"]
 >;
+
+export type UseDataTableResult<TData extends object> = {
+  table: Table<TData>;
+  rows: Row<TData>[];
+  resolvedColumns: ColumnDef<TData, unknown>[];
+  isSingleSelection: boolean;
+  selectedRow: TData | null;
+  selectedRows: TData[];
+};
