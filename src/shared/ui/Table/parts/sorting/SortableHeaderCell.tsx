@@ -3,10 +3,15 @@ import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
 import { flexRender, type Header } from "@tanstack/react-table";
 
-export const renderSortableHeader = <TData extends object>(
-  header: Header<TData, unknown>,
-  enableSorting: boolean,
-) => {
+type SortableHeaderCellProps<TData extends object> = {
+  header: Header<TData, unknown>;
+  enableSorting: boolean;
+};
+
+export const SortableHeaderCell = <TData extends object>({
+  header,
+  enableSorting,
+}: SortableHeaderCellProps<TData>) => {
   if (header.isPlaceholder) return null;
 
   const column = header.column;

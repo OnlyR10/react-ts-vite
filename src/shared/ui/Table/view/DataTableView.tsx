@@ -1,8 +1,8 @@
 import { cn } from "@/shared/lib/cn";
+import { TableBodyContent } from "@/shared/ui/Table/parts/body/TableBodyContent";
+import { SortableHeaderCell } from "@/shared/ui/Table/parts/sorting/SortableHeaderCell";
 import { type ColumnDef, type Row, type Table as TanStackTableType } from "@tanstack/react-table";
 
-import { renderSortableHeader } from "../lib/renderSortableHeader";
-import { renderTableBodyContent } from "../lib/renderTableBodyContent";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "../primitives";
 
 import type { TanStackTableProps } from "../types";
@@ -32,15 +32,6 @@ export const DataTableView = <TData extends object>({
   containerClassName,
   className,
 }: DataTableViewProps<TData>) => {
-  const bodyContent = renderTableBodyContent({
-    isPending,
-    isError,
-    rows,
-    colSpan: resolvedColumns.length,
-    emptyState,
-    isSingleSelection,
-  });
-
   return (
     <Table
       containerClassName={cn("overflow-hidden rounded-md border", containerClassName)}
@@ -51,14 +42,23 @@ export const DataTableView = <TData extends object>({
           <TableRow key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
               <TableHead key={header.id} className="px-3 py-2">
-                {renderSortableHeader(header, enableSorting)}
+                <SortableHeaderCell header={header} enableSorting={enableSorting} />
               </TableHead>
             ))}
           </TableRow>
         ))}
       </TableHeader>
 
-      <TableBody>{bodyContent}</TableBody>
+      <TableBody>
+        <TableBodyContent
+          isPending={isPending}
+          isError={isError}
+          rows={rows}
+          colSpan={resolvedColumns.length}
+          emptyState={emptyState}
+          isSingleSelection={isSingleSelection}
+        />
+      </TableBody>
     </Table>
   );
 };
