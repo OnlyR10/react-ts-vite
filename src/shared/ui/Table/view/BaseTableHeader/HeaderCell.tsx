@@ -8,7 +8,7 @@ type SortableHeaderCellProps<TData extends object> = {
   enableSorting: boolean;
 };
 
-export const SortableHeaderCell = <TData extends object>({
+export const HeaderCell = <TData extends object>({
   header,
   enableSorting,
 }: SortableHeaderCellProps<TData>) => {
@@ -29,13 +29,12 @@ export const SortableHeaderCell = <TData extends object>({
     <button
       type="button"
       className={cn(
-        "flex items-center gap-1.5 -mx-1 px-1 py-0.5 rounded-sm hover:bg-muted/50 active:bg-muted transition-colors text-left font-medium w-full",
-        sortDirection && "text-foreground",
+        "flex items-center gap-2.5 transition-colors font-medium text-sm text-foreground",
       )}
       onClick={column.getToggleSortingHandler()}
     >
       {flexRender(column.columnDef.header, header.getContext())}
-      <SortIcon className="size-3.5 flex-shrink-0 opacity-70" />
+      <SortIcon className="size-2.5" />
     </button>
   );
 };
