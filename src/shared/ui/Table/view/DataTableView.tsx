@@ -1,9 +1,9 @@
 import { cn } from "@/shared/lib/cn";
-import { TableBodyContent } from "@/shared/ui/Table/parts/body/TableBodyContent";
-import { SortableHeaderCell } from "@/shared/ui/Table/parts/sorting/SortableHeaderCell";
 import { type ColumnDef, type Row, type Table as TanStackTableType } from "@tanstack/react-table";
 
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "../primitives";
+import { Table } from "../primitives";
+import { BaseTableBody } from "./BaseTableBody/BaseTableBody";
+import { BaseTableHeader } from "./BaseTableHeader/BaseTableHeader";
 
 import type { TanStackTableProps } from "../types";
 
@@ -16,7 +16,6 @@ type DataTableViewProps<TData extends object> = {
   isPending: boolean;
   isError: boolean;
   emptyState: TanStackTableProps<TData>["emptyState"];
-  containerClassName?: string;
   className?: string;
 };
 
@@ -29,28 +28,17 @@ export const DataTableView = <TData extends object>({
   isPending,
   isError,
   emptyState,
-  containerClassName,
   className,
 }: DataTableViewProps<TData>) => {
-  return (
-    <Table
-      containerClassName={cn("overflow-hidden rounded-md border", containerClassName)}
-      className={className}
-    >
-      <TableHeader className="bg-muted/30 sticky top-0 z-10">
-        {table.getHeaderGroups().map((headerGroup) => (
-          <TableRow key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <TableHead key={header.id} className="px-3 py-2">
-                <SortableHeaderCell header={header} enableSorting={enableSorting} />
-              </TableHead>
-            ))}
-          </TableRow>
-        ))}
-      </TableHeader>
+  const selectedCount = table.getSelectedRowModel().rows.length;
+  const totalCount = rows.length;
 
-      <TableBody>
-        <TableBodyContent
+  return (
+    <div className="space-y-6">
+      <Table containerClassName={cn("text-sm")} className={className}>
+        <BaseTableHeader table={table} enableSorting={enableSorting} />
+
+        <BaseTableBody
           isPending={isPending}
           isError={isError}
           rows={rows}
@@ -58,7 +46,11 @@ export const DataTableView = <TData extends object>({
           emptyState={emptyState}
           isSingleSelection={isSingleSelection}
         />
-      </TableBody>
-    </Table>
+      </Table>
+      <div className="text-sm text-muted-foreground font-normal">
+        {selectedCount} из {totalCount} записи(ей) выбрано
+      </div>{" "}
+      {/* //TODO: Тут подумаю как сделать получше */}
+    </div>
   );
 };

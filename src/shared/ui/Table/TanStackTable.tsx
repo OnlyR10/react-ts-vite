@@ -6,7 +6,6 @@ import type { TanStackTableProps } from "./types";
 const TanStackTable = <TData extends object = object>({
   data,
   columns,
-  containerClassName,
   className,
   rowSelectionMode = "none",
   showSelectionColumn = true,
@@ -41,7 +40,6 @@ const TanStackTable = <TData extends object = object>({
       isPending={isPending}
       isError={isError}
       emptyState={emptyState}
-      containerClassName={containerClassName}
       className={className}
     />
   );

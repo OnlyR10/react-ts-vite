@@ -1,4 +1,4 @@
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, MinusIcon } from "lucide-react";
 import { Checkbox as CheckboxPrimitive } from "radix-ui";
 import { useId } from "react";
 
@@ -19,12 +19,18 @@ export const Checkbox = ({
 }: CheckboxProps) => {
   const generatedId = useId();
   const checkboxId = id ?? generatedId;
+  const isIndeterminate = checked === "indeterminate";
+
   const checkboxRootClassName = cn(
     "peer mt-0.5 grid size-4 shrink-0 place-items-center rounded-sm",
     "border border-input bg-input outline-none",
     "disabled:cursor-not-allowed disabled:opacity-50",
+    // checked
     "data-[state=checked]:border-primary data-[state=checked]:bg-primary",
     "data-[state=checked]:text-primary-foreground",
+    // indeterminate
+    "data-[state=indeterminate]:border-primary data-[state=indeterminate]:bg-primary",
+    "data-[state=indeterminate]:text-primary-foreground",
     isInvalid &&
       "border-destructive ring-3 ring-destructive/20 data-[state=checked]:border-destructive",
   );
@@ -46,7 +52,11 @@ export const Checkbox = ({
         className={checkboxRootClassName}
       >
         <CheckboxPrimitive.Indicator data-slot="checkbox-indicator">
-          <CheckIcon className="size-3.5" />
+          {isIndeterminate ? (
+            <MinusIcon className="size-3.5 stroke-[2.5]" />
+          ) : (
+            <CheckIcon className="size-3.5" />
+          )}
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
 
