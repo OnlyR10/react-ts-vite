@@ -11,7 +11,7 @@ export const createSelectionColumn = <TData extends object>(): ColumnDef<TData, 
       onCheckedChange={(checked) => {
         row.toggleSelected(Boolean(checked));
       }}
-      disabled={!row.getCanSelect()}
+      isDisabled={!row.getCanSelect()}
       aria-label={`Select row ${row.id}`}
     />
   ),

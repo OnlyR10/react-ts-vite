@@ -1,3 +1,4 @@
+import { Checkbox } from "@/shared/ui/Checkbox";
 import { TextInput } from "@/shared/ui/Input";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
@@ -17,15 +18,23 @@ export const Components = () => {
   }
 
   return (
-    <main className="mx-auto max-w-md p-6">
-      <TextInput
-        label="Name"
-        type="text"
-        placeholder="Name"
-        description="Введите name."
-        defaultValue={data?.name || "name"}
-      />
+    <main className=" flex  flex-col gap-8">
+      <div className=" flex gap-8 ">
+        <TextInput
+          label="Name"
+          type="text"
+          placeholder="Name"
+          description="Введите name."
+          defaultValue={data?.name || "name"}
+        />
 
+        <Checkbox
+          id="testCheckbox"
+          name="testCheckbox"
+          label="Заголовок"
+          description="Текст описание дополнительный."
+        />
+      </div>
       <Link to="/">Back to Home page</Link>
     </main>
   );
