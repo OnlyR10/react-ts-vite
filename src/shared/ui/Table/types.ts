@@ -42,6 +42,7 @@ export type UseDataTableResult<TData extends object> = {
   rows: Row<TData>[];
   resolvedColumns: ColumnDef<TData, unknown>[];
   isSingleSelection: boolean;
+  isMultipleSelection: boolean;
   selectedRow: TData | null;
   selectedRows: TData[];
 };

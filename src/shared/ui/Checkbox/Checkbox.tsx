@@ -9,13 +9,12 @@ import type { CheckboxProps } from "./types";
 
 export const Checkbox = ({
   id,
-  name,
   label,
   description,
   checked,
-  onCheckedChange,
   isInvalid,
   isDisabled,
+  ...props
 }: CheckboxProps) => {
   const generatedId = useId();
   const checkboxId = id ?? generatedId;
@@ -43,20 +42,18 @@ export const Checkbox = ({
     >
       <CheckboxPrimitive.Root
         id={checkboxId}
-        name={name}
         checked={checked}
         disabled={isDisabled}
-        onCheckedChange={onCheckedChange}
         data-slot="checkbox"
         aria-invalid={isInvalid}
         className={checkboxRootClassName}
+        {...props}
       >
-        <CheckboxPrimitive.Indicator data-slot="checkbox-indicator">
-          {isIndeterminate ? (
-            <MinusIcon className="size-3.5 stroke-[2.5]" />
-          ) : (
-            <CheckIcon className="size-3.5" />
-          )}
+        <CheckboxPrimitive.Indicator
+          data-slot="checkbox-indicator"
+          className="grid place-content-center text-current transition-none [&>svg]:size-3.5"
+        >
+          {isIndeterminate ? <MinusIcon /> : <CheckIcon />}
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
 

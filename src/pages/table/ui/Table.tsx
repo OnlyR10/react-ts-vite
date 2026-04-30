@@ -1,6 +1,6 @@
 import { useUsersQuery } from "@/entities/users";
 import { getUserRowId, userColumns } from "@/pages/table/model";
-import { TanStackTable } from "@/shared/ui/Table";
+import { BaseTable } from "@/shared/ui/Table";
 import { Link } from "@tanstack/react-router";
 
 export const Table = () => {
@@ -11,7 +11,7 @@ export const Table = () => {
       <div className="flex flex-row gap-6">
         <div className="flex flex-col gap-2">
           <div className="text-sm font-medium">Выбор единичный строки</div>
-          <TanStackTable
+          <BaseTable
             data={data}
             columns={userColumns}
             rowSelectionMode="single"
@@ -23,7 +23,7 @@ export const Table = () => {
 
         <div className="flex flex-col gap-2">
           <div className="text-sm font-medium">Мультивыбор с чекбоксами</div>
-          <TanStackTable
+          <BaseTable
             data={data}
             columns={userColumns}
             rowSelectionMode="multiple"

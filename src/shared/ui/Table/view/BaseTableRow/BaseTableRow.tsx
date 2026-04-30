@@ -25,7 +25,7 @@ export const BaseTableRow = <TData extends object>({
         const cellRenderer = cell.column.columnDef.cell;
 
         return (
-          <TableCell key={cell.id} className="px-3 py-2 whitespace-nowrap">
+          <TableCell key={cell.id} className="px-3 py-3.75 whitespace-nowrap">
             {cellRenderer
               ? flexRender(cellRenderer, cell.getContext())
               : (cell.getValue() as ReactNode)}

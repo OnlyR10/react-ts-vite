@@ -19,22 +19,20 @@ export const useDataTable = <TData extends object = object>({
   data,
   columns,
   rowSelectionMode = "none",
-  showSelectionColumn = true,
   onSelectedRowChange,
   onSelectedRowsChange,
   enableSorting = true,
   getRowId,
-  tableOptions = {},
 }: TanStackTableProps<TData>): UseDataTableResult<TData> => {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const { isSingleSelection, isMultipleSelection, selectionEnabled, showSelectionCol } =
-    getSelectionFlags(rowSelectionMode, showSelectionColumn);
+  const { isSingleSelection, isMultipleSelection, selectionEnabled } =
+    getSelectionFlags(rowSelectionMode);
 
   const resolvedColumns = useMemo<ColumnDef<TData, unknown>[]>(
-    () => (showSelectionCol ? [createSelectionColumn<TData>(), ...columns] : columns),
-    [columns, showSelectionCol],
+    () => (isMultipleSelection ? [createSelectionColumn<TData>(), ...columns] : columns),
+    [columns, isMultipleSelection],
   );
 
   const table = useReactTable<TData>({
@@ -55,7 +53,6 @@ export const useDataTable = <TData extends object = object>({
       ? (originalRow: TData, index: number, parent?: Row<TData>) =>
           getRowId(originalRow, index, parent)
       : undefined,
-    ...tableOptions,
   });
 
   const selectedRows = useMemo(() => {
@@ -85,6 +82,7 @@ export const useDataTable = <TData extends object = object>({
     rows: table.getRowModel().rows,
     resolvedColumns,
     isSingleSelection,
+    isMultipleSelection,
     selectedRow,
     selectedRows,
   };
