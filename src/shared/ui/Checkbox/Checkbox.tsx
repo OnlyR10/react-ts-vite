@@ -21,8 +21,9 @@ export const Checkbox = ({
   const isIndeterminate = checked === "indeterminate";
 
   const checkboxRootClassName = cn(
-    "peer mt-0.5 grid size-4 shrink-0 place-items-center rounded-sm",
+    "peer grid size-4 shrink-0 place-items-center rounded-sm",
     "border border-input bg-input outline-none",
+    "motion-safe:transition-[background-color,border-color,box-shadow] motion-safe:duration-150 motion-safe:ease-out",
     "disabled:cursor-not-allowed disabled:opacity-50",
     // checked
     "data-[state=checked]:border-primary data-[state=checked]:bg-primary",
@@ -51,7 +52,13 @@ export const Checkbox = ({
       >
         <CheckboxPrimitive.Indicator
           data-slot="checkbox-indicator"
-          className="grid place-content-center text-current transition-none [&>svg]:size-3.5"
+          className={cn(
+            "grid place-content-center text-current [&>svg]:size-3.5",
+            "motion-safe:transition-[opacity,transform] motion-safe:duration-150 motion-safe:ease-out",
+            "data-[state=unchecked]:scale-75 data-[state=unchecked]:opacity-0",
+            "data-[state=checked]:scale-100 data-[state=checked]:opacity-100",
+            "data-[state=indeterminate]:scale-100 data-[state=indeterminate]:opacity-100",
+          )}
         >
           {isIndeterminate ? <MinusIcon /> : <CheckIcon />}
         </CheckboxPrimitive.Indicator>
