@@ -5,27 +5,37 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 import { buttonVariants } from "./buttonVariants";
 
-function Button({
+type ButtonProps = Omit<React.ComponentProps<"button">, "className" | "aria-invalid"> &
+  VariantProps<typeof buttonVariants> & {
+    className?: string;
+    isIconOnly?: boolean;
+    isInvalid?: boolean;
+    asChild?: boolean;
+    "aria-invalid"?: React.AriaAttributes["aria-invalid"];
+  };
+
+export const Button = ({
   className,
   variant = "default",
   size = "default",
+  isIconOnly = false,
+  isInvalid = false,
   asChild = false,
+  "aria-invalid": ariaInvalidProp,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
+}: ButtonProps) => {
   const Comp = asChild ? Slot.Root : "button";
+  const ariaInvalid = ariaInvalidProp ?? isInvalid;
 
   return (
     <Comp
       data-slot="button"
       data-variant={variant}
       data-size={size}
-      className={cn(buttonVariants({ variant, size, className }))}
+      data-icon-only={isIconOnly}
+      aria-invalid={ariaInvalid}
+      className={cn(buttonVariants({ variant, size, isIconOnly, className }))}
       {...props}
     />
   );
-}
-
-export { Button };
+};
